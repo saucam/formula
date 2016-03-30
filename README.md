@@ -15,4 +15,4 @@ mvn clean package
 
 Running:
 
-java -cp /path/to/jar/formulaone-1.0-SNAPSHOT-jar-with-dependencies.jar com.formulaone.TestMain <TrackLength in metres> <Number of Teams>
+java -cp /path/to/jar/formulaone-1.0-SNAPSHOT-jar-with-dependencies.jar com.formulaone.TestMain (TrackLength in metres) (Number of Teams)
