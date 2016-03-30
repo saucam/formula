@@ -24,7 +24,7 @@ object TestMain extends LazyLogging {
     val track = new RaceTrack(trackLength, numLanes)
 
     // numLanes = numTeams for now
-    val race = new FormulaOneRace(track, numLanes)
+    val race = new FormulaOneRace(track, numTeams)
     // Initialize the race
     race.init
     // Start the race

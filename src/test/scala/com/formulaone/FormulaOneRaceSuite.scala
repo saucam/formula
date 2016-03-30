@@ -44,17 +44,8 @@ class FormulaOneRaceSuite extends FormulaFunSuite
 
     val prevPositions = race.getCurrentPositions
 
-    race.tick
-
-    // positions are updated correctly by single tick
-    val expPositions =
-      for(id <- 1 to numLanes) yield {
-        val speed = speeds(id-1)
-        val acc = accs(id-1)
-        prevPositions(id-1) + (speed*tickInterval + (acc*tickInterval*tickInterval)/2)
-      }
-
-    race.getCurrentPositions() should equal (expPositions)
+    race.setLagger(1)
+    race.updateSpeeds
 
     // speeds are updated correctly by single tick
     /**
@@ -85,8 +76,64 @@ class FormulaOneRaceSuite extends FormulaFunSuite
     }
   }
 
-  test("End to End Race") {
+  test("Each tick should update the positions correctly") {
+    val threshold = 10
+    val numLanes = 3
+    // test on a 5km track
+    val trackLength = 5000
+    val tickInterval = 2
+    val positions = Array(67, 77, 89)
 
+    val track = new RaceTrackTest(trackLength, numLanes, threshold, positions)
+
+    // numLanes = numTeams for now
+    val race = new FormulaOneRaceTest(track, numLanes, tickInterval)
+    // Initialize the race
+    race.init
+
+    val speeds = race.getCurrentSpeeds
+    val accs = race.getCurrentAccs
+    val hfs = race.getHfs
+    val topSpeeds = race.getTopSpeeds
+
+    val prevPositions = race.getCurrentPositions
+
+    race.tick
+
+    // positions are updated correctly by single tick
+    val expPositions =
+      for(id <- 1 to numLanes) yield {
+        val speed = speeds(id-1)
+        val acc = accs(id-1)
+        prevPositions(id-1) + (speed*tickInterval + (acc*tickInterval*tickInterval)/2)
+      }
+
+    race.getCurrentPositions() should equal (expPositions)
+
+  }
+
+  test("End to End Race") {
+    var trackLength = 5000
+    var numTeams = 8
+
+    val numLanes = numTeams
+    val track = new RaceTrackTest(trackLength, numLanes, 10)
+
+    // numLanes = numTeams for now
+    val race = new FormulaOneRace(track, numTeams)
+    // Initialize the race
+    race.init
+    // Start the race
+    race.start
+
+    // Get the final timings, speeds
+    val standings = race.getFinalStandings
+    val speeds = race.getFinalSpeeds
+    val timings = race.getFinishTimes
+
+    logger.info(s"Final Timings: ${timings.mkString(" ,")}")
+    logger.info(s"Final Speeds: ${speeds.mkString(" ,")}")
+    logger.info(s"Final Standings: ${standings.mkString(" ,")}")
   }
 
 }

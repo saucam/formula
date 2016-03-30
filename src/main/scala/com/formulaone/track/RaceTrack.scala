@@ -79,6 +79,8 @@ class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
 
   def updatePosition(pos: Int, id: Int): Unit = {
     if (!isFinish(id)) {
+      // Clear the previous position
+      clearPosition(id)
       // Update the position
       if (pos >= finishLine) {
         // Racer has finished the race
@@ -90,6 +92,9 @@ class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
     }
   }
 
+  def clearPosition(id: Int): Unit = {
+    unmarkPosition(positions(id-1))
+  }
 }
 
 object RaceTrack {

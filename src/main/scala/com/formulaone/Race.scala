@@ -52,6 +52,6 @@ abstract class Race(val track: RaceTrack, val numTeams: Int)
   // Return the final standings of the race
   // Allowed to be called only when race has
   // Finished
-  def getFinalStandings(): Seq[Int]
+  def getFinalStandings(): Seq[(Int, Int)]
 
 }

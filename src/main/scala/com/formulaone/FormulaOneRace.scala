@@ -47,8 +47,32 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
     }
   }
 
-  override def tick(): Unit = {
-    // evaluate distances travelled
+  def updateSpeeds(): Unit = {
+    /* Another pass to update speed!
+    * Note that speed of the car which has already finished in this tick
+    * does not get updated and the last speed is considered the final speed
+    * Also note that updated positions from the above loop determine
+    * whether the driver will reduce the speed according to hf or not
+    */
+    var i = 1
+    while (i <= numTeams) {
+      if (!track.isFinish(i)) {
+        val car = getCar(i)
+        car.setSpeed(getNewSpeed(car, i))
+        // if I am lagger
+        if (i == lagger) {
+          // If havent used nitro so far
+          if (!car.nitroUsage) {
+            car.setSpeed(Math.min(2 * car.speed, car.topSpeed))
+            car.nitroUsage = true
+          }
+        }
+      }
+      i += 1
+    }
+  }
+
+  def updatePositions(): Unit = {
     var i = 1
     var minPos = Int.MaxValue
     while (i <= numTeams) {
@@ -83,28 +107,11 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
 
       i += 1
     }
+  }
 
-    /* Another pass to update speed!
-     * Note that speed of the car which has already finished in this tick
-     * does not get updated and the last speed is considered the final speed
-     */
-    i = 1
-    while (i <= numTeams) {
-      if (!track.isFinish(i)) {
-        val car = getCar(i)
-        car.setSpeed(getNewSpeed(car, i))
-        // if I am lagger
-        if (i == lagger) {
-          // If havent used nitro so far
-          if (!car.nitroUsage) {
-            car.setSpeed(Math.min(2 * car.speed, car.topSpeed))
-            car.nitroUsage = true
-          }
-        }
-      }
-      i += 1
-    }
-
+  override def tick(): Unit = {
+    updatePositions
+    updateSpeeds
     timeElapsed += tickInterval
   }
 
@@ -127,14 +134,16 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
     }
   }
 
-  override def getFinalStandings: Seq[Int] = {
+  override def getFinalStandings: Seq[(Int, Int)] = {
     timings
       .zipWithIndex
-      .map(x => ((x._2+1) -> x._1))
+      .map(x => ((x._2 + 1) -> x._1))
       // sort by timings
       .sortBy(_._2)
       // Return ids
       .map(_._1)
+      .zipWithIndex
+      .map(x => (x._1 -> (x._2 + 1)))
   }
 
   def getFinishTimes: Array[Long] = {

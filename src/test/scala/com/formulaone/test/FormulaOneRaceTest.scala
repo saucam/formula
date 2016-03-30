@@ -22,4 +22,8 @@ class FormulaOneRaceTest(track: RaceTrack, numTeams: Int, tickInterval: Int)
   def getTopSpeeds(): Array[Double] = {
     cars.map(x => x.topSpeed)
   }
+
+  def setLagger(id: Int): Unit = {
+    lagger = id
+  }
 }
