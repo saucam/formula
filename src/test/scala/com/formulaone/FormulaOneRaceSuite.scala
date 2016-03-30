@@ -85,4 +85,8 @@ class FormulaOneRaceSuite extends FormulaFunSuite
     }
   }
 
+  test("End to End Race") {
+
+  }
+
 }

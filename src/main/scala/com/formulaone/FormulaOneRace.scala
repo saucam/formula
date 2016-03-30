@@ -136,6 +136,22 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
       // Return ids
       .map(_._1)
   }
+
+  def getFinishTimes: Array[Long] = {
+    timings
+  }
+
+  def getFinalSpeeds(): Array[Double] = {
+    assert(hasEnded == true)
+    val speeds = getCurrentSpeeds
+    // limit to 2 decimal places ?
+    speeds.map(x => x - (x % 0.01))
+  }
+
+  def getCurrentSpeeds(): Array[Double] = {
+    // Skip the first car
+    cars.map(x => x.speed)
+  }
 }
 
 object FormulaOneRace {
