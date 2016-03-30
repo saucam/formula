@@ -20,23 +20,19 @@ abstract class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 
     extends Track(trackLength) {
 
   // Just to hold the current positions of ids
-  val positions = new Array[Int](lanes)
-  val finished = new Array[Boolean](lanes)
-
-  val isSorted: Boolean = false
-
-  // Initialize the positions
-  initPos()
+  val positions = new Array[Int](lanes+1)
+  val finished = new Array[Boolean](lanes+1)
+  val finishLine = trackLength + START_POS
 
   def initPos(): Unit = {
     for (lane <- (1 to lanes)) {
       positions(lane) = START_POS + (200*(lanes-lane))
       finished(lane) = false
     }
-    initTrack()
   }
 
   def initTrack(): Unit = {
+    initPos
     positions.map(x => markPosition(x))
   }
 
@@ -47,24 +43,28 @@ abstract class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 
     val currentPos = positions(id)
 
     // WARNINING: Only considers cars that are atmost at the finish line and not beyond!
-    val end = if (currentPos + threshold > trackLength) {
-      trackLength
+    val end = if ((currentPos + threshold) > (finishLine)) {
+      finishLine
     } else {
       currentPos + threshold
     }
 
-    val after = count(currentPos + 1, end)
-    val sum = if (currentPos > 0) {
-      val start = if (currentPos > threshold) currentPos - threshold else 0
-      count(start, currentPos-1) + after
-    } else {
-      after
+    // val after = count(currentPos + 1, end)
+    val start = {
+      if (currentPos > START_POS) {
+        if (currentPos > threshold) currentPos - threshold else START_POS
+      } else {
+        START_POS
+      }
     }
-    sum > 0
+
+    val sum = count(start, end)
+    sum > 1
   }
 
   def getCurrentPositions(): Seq[Int] = {
-      positions.toList
+    // Skip the first element
+    positions.toList.tail
   }
 
   def getCurrentPosition(id: Int): Int = {
@@ -80,7 +80,7 @@ abstract class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 
   def updatePosition(pos: Int, id: Int): Unit = {
     if (!isFinish(id)) {
       // Update the position
-      if (pos > trackLength) {
+      if (pos >= finishLine) {
         // Racer has finished the race
         finished(id) = true
       }
@@ -95,5 +95,5 @@ abstract class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 
 object RaceTrack {
 
   val FINISHED_POS = -1
-  val START_POS = 0
+  val START_POS = 1
 }

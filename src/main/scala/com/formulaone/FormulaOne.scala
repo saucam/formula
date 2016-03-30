@@ -23,9 +23,9 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, val tickInterval: Int = 2)
 
   override def init(): Unit = {
     // Init Cars
-    super.init()
+    super.init
     // Init track
-    track.initTrack()
+    track.initTrack
   }
 
   private def getNewSpeed(car: Car, id: Int): Int = {
