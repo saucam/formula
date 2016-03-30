@@ -16,18 +16,18 @@ import RaceTrack._
  * @param lanes Maximum Number of cars supported
  * @param threshold
  */
-abstract class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
+class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
     extends Track(trackLength) {
 
   // Just to hold the current positions of ids
-  val positions = new Array[Int](lanes+1)
-  val finished = new Array[Boolean](lanes+1)
+  val positions = new Array[Int](lanes)
+  val finished = new Array[Boolean](lanes)
   val finishLine = trackLength + START_POS
 
   def initPos(): Unit = {
     for (lane <- (1 to lanes)) {
-      positions(lane) = START_POS + (200*(lanes-lane))
-      finished(lane) = false
+      positions(lane-1) = START_POS + (200*(lanes-lane))
+      finished(lane-1) = false
     }
   }
 
@@ -40,7 +40,7 @@ abstract class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 
   // Should only be called for cars that have not yet finished the race
   def isClose(id: Int): Boolean = {
     // Get cars currentPos
-    val currentPos = positions(id)
+    val currentPos = positions(id-1)
 
     // WARNINING: Only considers cars that are atmost at the finish line and not beyond!
     val end = if ((currentPos + threshold) > (finishLine)) {
@@ -62,29 +62,29 @@ abstract class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 
     sum > 1
   }
 
-  def getCurrentPositions(): Seq[Int] = {
+  def getCurrentPositions(): Array[Int] = {
     // Skip the first element
-    positions.toList.tail
+    positions
   }
 
   def getCurrentPosition(id: Int): Int = {
-    positions(id)
+    positions(id-1)
   }
 
   def allFinished(): Boolean = {
     !finished.contains(false)
   }
 
-  def isFinish(id: Int): Boolean = finished(id)
+  def isFinish(id: Int): Boolean = finished(id-1)
 
   def updatePosition(pos: Int, id: Int): Unit = {
     if (!isFinish(id)) {
       // Update the position
       if (pos >= finishLine) {
         // Racer has finished the race
-        finished(id) = true
+        finished(id-1) = true
       }
-      positions(id) = pos
+      positions(id-1) = pos
       // Mark on the track the position of this car
       markPosition(pos)
     }

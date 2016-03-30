@@ -6,11 +6,11 @@ import com.formulaone.track.RaceTrack
 /**
  * Created by yash.datta on 29/03/16.
  */
-case class Car(topSpeed: Int, acc: Int, hf: Float) {
-  var speed: Int = 0
+case class Car(topSpeed: Double, acc: Int, hf: Float) {
+  var speed: Double = 0
   var nitroUsage: Boolean = false
 
-  def setSpeed(curSpeed: Int): Unit = {
+  def setSpeed(curSpeed: Double): Unit = {
     speed = curSpeed
   }
 }
@@ -27,9 +27,14 @@ abstract class Race(val track: RaceTrack, val numTeams: Int)
 
   def init(): Unit = {
     var i = 1
-    while (i <= cars.size) {
-      cars(i) = Car( ((150 + 10*i)*0.2777).toInt, 2*i, 0.8f)
+    while (i <= numTeams) {
+      cars(i-1) = Car( ((150 + 10*i)*0.2777).toInt, 2*i, 0.8f)
+      i += 1
     }
+  }
+
+  def getCar(id: Int): Car = {
+    cars(id-1)
   }
 
   // Begin the race
@@ -42,7 +47,7 @@ abstract class Race(val track: RaceTrack, val numTeams: Int)
   def hasEnded(): Boolean
 
   // Returns the current positions
-  def getCurrentPositions(): Seq[Int]
+  def getCurrentPositions(): Array[Int]
 
   // Return the final standings of the race
   // Allowed to be called only when race has

@@ -20,8 +20,8 @@ class RaceTrackTest(trackLength: Int, lanes: Int, threshold: Int)
   override def initPos(): Unit = {
     if (argPositions != null) {
       for (lane <- 1 to lanes) {
-        positions(lane) = argPositions(lane - 1)
-        finished(lane) = false
+        positions(lane - 1) = argPositions(lane - 1)
+        finished(lane - 1) = false
       }
     } else {
       super.initPos()

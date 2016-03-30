@@ -27,4 +27,8 @@ abstract class RaceClock(numTimings: Int) extends Clock {
 
   def getTimings(): Seq[Long] = timings
 
+  def setFinishTime(t: Long, id: Int): Unit = {
+    timings(id-1) = t
+  }
+
 }
