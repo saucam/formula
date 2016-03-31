@@ -136,4 +136,28 @@ class FormulaOneRaceSuite extends FormulaFunSuite
     logger.info(s"Final Standings: ${standings.mkString(" ,")}")
   }
 
+  test("Large track race") {
+    var trackLength = 10000
+    var numTeams = 30
+
+    val numLanes = numTeams
+    val track = new RaceTrackTest(trackLength, numLanes, 10)
+
+    // numLanes = numTeams for now
+    val race = new FormulaOneRace(track, numTeams)
+    // Initialize the race
+    race.init
+    // Start the race
+    race.start
+
+    // Get the final timings, speeds
+    val standings = race.getFinalStandings
+    val speeds = race.getFinalSpeeds
+    val timings = race.getFinishTimes
+
+    logger.info(s"Final Timings: ${timings.mkString(" ,")}")
+    logger.info(s"Final Speeds: ${speeds.mkString(" ,")}")
+    logger.info(s"Final Standings: ${standings.mkString(" ,")}")
+  }
+
 }

@@ -1,6 +1,8 @@
 package com.formulaone.track
 
 import java.util.Arrays
+import com.formulaone.DataInvalidException
+
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.BitSet
 
@@ -26,6 +28,10 @@ class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
 
   def initPos(): Unit = {
     for (lane <- (1 to lanes)) {
+      val position = START_POS + (200*(lanes-lane))
+      if (position >= finishLine) {
+        throw new DataInvalidException(s"Start Position of team ${lane} = ${position} exceeds the trackLength!($trackLength)")
+      }
       positions(lane-1) = START_POS + (200*(lanes-lane))
       finished(lane-1) = false
     }
@@ -38,10 +44,15 @@ class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
 
   // Returns true if any car is closer than threshold to the input car id
   // Should only be called for cars that have not yet finished the race
+  // or have just finished the race. Cars which have finished the race
+  // will not check nearby cars
   def isClose(id: Int): Boolean = {
     // Get cars currentPos
     val currentPos = positions(id-1)
 
+    if (currentPos >= finishLine) {
+      return false
+    }
     // WARNINING: Only considers cars that are atmost at the finish line and not beyond!
     val end = if ((currentPos + threshold) > (finishLine)) {
       finishLine

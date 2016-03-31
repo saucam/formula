@@ -8,8 +8,8 @@ import scala.collection.mutable.{ArrayBuffer, BitSet}
 class Track(val trackLength: Int) {
 
   // Additional length for cars finishing
-  protected val track = new Array[Byte](trackLength+1000)
-  private val maxVal = trackLength
+  protected val track = new Array[Byte](trackLength+1001)
+  private val maxVal = trackLength+1000
 
   def update(pos: Int, value: Byte): Unit = {
     var v = pos
@@ -38,5 +38,6 @@ class Track(val trackLength: Int) {
 
   // Get the count of runners currently between this track length
   def count(startPos: Int, endPos: Int): Int = read(endPos) - read(startPos-1)
+
 
 }
