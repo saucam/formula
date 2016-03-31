@@ -23,6 +23,10 @@ case class Car(topSpeed: Double, acc: Int, hf: Float) {
 abstract class Race(val track: RaceTrack, val numTeams: Int)
     extends RaceClock(numTeams)  {
 
+  if (numTeams < 2) {
+    throw new DataInvalidException("Need atleast 2 teams for a race")
+  }
+
   protected val cars = new Array[Car](numTeams)
 
   def init(): Unit = {
