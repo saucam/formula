@@ -22,7 +22,7 @@ class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
   // Just to hold the current positions of ids
   val positions = new Array[Int](lanes)
   val finished = new Array[Boolean](lanes)
-  val finishLine = trackLength + START_POS
+  final val finishLine = trackLength + START_POS
 
   def initPos(): Unit = {
     for (lane <- (1 to lanes)) {

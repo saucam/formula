@@ -49,14 +49,12 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
 
   def updateSpeeds(): Unit = {
     /* Another pass to update speed!
-    * Note that speed of the car which has already finished in this tick
-    * does not get updated and the last speed is considered the final speed
-    * Also note that updated positions from the above loop determine
+    * Note that updated positions from the above loop determine
     * whether the driver will reduce the speed according to hf or not
     */
     var i = 1
     while (i <= numTeams) {
-      if (!track.isFinish(i)) {
+      if ((!track.isFinish(i)) || (getFinishTime(i) == timeElapsed)) {
         val car = getCar(i)
         car.setSpeed(getNewSpeed(car, i))
         // if I am lagger
@@ -96,10 +94,11 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
         val newPos = track.getCurrentPosition(i) + dist
         track.updatePosition(newPos, i)
         if (track.isFinish(i)) {
-          setFinishTime(timeElapsed, i)
+          // Add the current tick
+          setFinishTime(timeElapsed+tickInterval, i)
         }
         // Update the lagger
-        if (newPos < minPos) {
+        if ((newPos < minPos) && (newPos < track.finishLine)) {
           minPos = newPos
           lagger = i
         }
@@ -146,9 +145,11 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
       .map(x => (x._1 -> (x._2 + 1)))
   }
 
-  def getFinishTimes: Array[Long] = {
+  def getFinishTimes(): Array[Long] = {
     timings
   }
+
+  def getFinishTime(id: Int): Long = timings(id-1)
 
   def getFinalSpeeds(): Array[Double] = {
     assert(hasEnded == true)

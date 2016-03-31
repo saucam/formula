@@ -10,16 +10,18 @@ object TestMain extends LazyLogging {
 
   def main(args: Array[String]): Unit = {
 
+    // Lets have a 5 km race, refresh time is 2 seconds by default
     var trackLength = 5000
     var numTeams = 8
     if (args.size == 2) {
-      // Lets have a 5 km race, refresh time is 2 seconds by default
       trackLength = args(0).toInt
       numTeams = args(1).toInt
+    } else {
+      logger.info("Usage: java -cp <jar> <Track Length in metres> <Number of Teams>")
+      logger.info("Proceeding with defaults")
     }
 
-    logger.info("Usage: java -cp <jar> <Track Length in metres> <Number of Teams>")
-    logger.info("Proceeding with defaults, Track Length = 5000, Number of Teams = 8")
+    logger.info(s"Track Length = ${trackLength}, Number of Teams = ${numTeams}")
     val numLanes = numTeams
     val track = new RaceTrack(trackLength, numLanes)
 
@@ -37,7 +39,7 @@ object TestMain extends LazyLogging {
 
     logger.info(s"Final Timings: ${timings.mkString(" ,")}")
     logger.info(s"Final Speeds: ${speeds.mkString(" ,")}")
-    logger.info(s"Final Standings: ${standings.mkString(" ,")}")
+    logger.info(s"Final Standings:\n(TeamId, position) \n${standings.mkString("\n")}")
 
   }
 
