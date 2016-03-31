@@ -143,6 +143,7 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
       .map(_._1)
       .zipWithIndex
       .map(x => (x._1 -> (x._2 + 1)))
+      .sortBy(_._1)
   }
 
   def getFinishTimes(): Array[Long] = {

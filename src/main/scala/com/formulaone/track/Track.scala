@@ -15,7 +15,7 @@ class Track(val trackLength: Int) {
     var v = pos
     if(v == 0) return
     while(v <= maxVal) {
-      // TODO: Handle overflow here!
+      // TODO: Handle overflow here?
       track(v) = (track(v) + value).toByte
       v += (v & -v)
     }

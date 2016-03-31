@@ -68,4 +68,5 @@ class RaceTrackSuite extends FormulaFunSuite
 
     positions should equal (expPositions)
   }
+
 }

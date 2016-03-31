@@ -21,6 +21,18 @@ object TestMain extends LazyLogging {
       logger.info("Proceeding with defaults")
     }
 
+    if (trackLength < 201) {
+      throw new DataInvalidException("Track Length must be greater")
+    }
+
+    if (numTeams < 2) {
+      throw new DataInvalidException("Need atleast 2 teams for a race")
+    }
+
+    if (trackLength >= (Int.MaxValue - 1001)) {
+      throw new DataInvalidException("Track Length too large!")
+    }
+
     logger.info(s"Track Length = ${trackLength}, Number of Teams = ${numTeams}")
     val numLanes = numTeams
     val track = new RaceTrack(trackLength, numLanes)
