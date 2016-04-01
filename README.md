@@ -11,9 +11,10 @@ Assumptions:
 2. For cars that are seen to have crossed the finish line, rule to decrease the speed (in the last tick) in case of nearby 
    cars is not applied.
 
-2. Converted everything to m/s , m/s^2 and rounded distance calculations to nearest integer for simplicity.
+3. Converted everything to m/s , m/s^2 and rounded distance calculations to nearest integer for simplicity.
    So 1 metre is the minimum change in position detected for each interval
 
+4. Track supports upto 254 lanes so number of teams to race is limited to 254 
 
 Compilation and running tests: 
 mvn clean package
