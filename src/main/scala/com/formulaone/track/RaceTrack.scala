@@ -56,7 +56,7 @@ class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
 
   // Returns true if any car is closer than threshold to the input car id
   // Should only be called for cars that have not yet finished the race
-  // or have just finished the race. Cars which have finished the race
+  // Cars which have finished the race
   // will not check nearby cars
   def isClose(id: Int): Boolean = {
     // Get cars currentPos
@@ -65,15 +65,15 @@ class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
     if (currentPos >= finishLine) {
       return false
     }
-    // WARNINING: Only considers cars that are atmost at the finish line and not beyond!
-    val end = if ((currentPos + threshold) > (finishLine)) {
-      finishLine
+    // WARNINING: Only considers cars that are atmost 1 metre less than the finish line and not beyond!
+    val end = if ((currentPos + threshold) >= (finishLine)) {
+      finishLine - 1
     } else {
       currentPos + threshold
     }
 
     // val after = count(currentPos + 1, end)
-    val start = {
+    var start = {
       if (currentPos > START_POS) {
         if (currentPos > threshold) currentPos - threshold else START_POS
       } else {
@@ -81,6 +81,9 @@ class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
       }
     }
 
+    // safety check
+    if (start > end)
+      start = end
     val sum = count(start, end)
     sum > 1
   }
