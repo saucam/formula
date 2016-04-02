@@ -1,7 +1,7 @@
 package com.formulaone.test
 
 import com.formulaone.track.Track
-import com.formulaone.FormulaFunSuite
+import com.formulaone.{DataInvalidException, FormulaFunSuite}
 import com.typesafe.scalalogging.slf4j.LazyLogging
 
 /**
@@ -32,7 +32,7 @@ class TrackSuite extends FormulaFunSuite
   }
 
   test("Track handles marking the same position") {
-    val trackLength = 100
+    val trackLength = 300
     val track = new Track(trackLength)
 
     for(i <- 1 to 89) {
@@ -40,6 +40,22 @@ class TrackSuite extends FormulaFunSuite
     }
 
     track.count(89, 89) should equal (89)
+  }
+
+  test("Invalid track length throws DataInvalidException I") {
+    val trackLength = Int.MaxValue
+    val thrown = intercept[DataInvalidException] {
+      val track = new Track(trackLength)
+    }
+    logger.info(s"Got ${thrown} as expected.")
+  }
+
+  test("Invalid track length throws DataInvalidException II") {
+    val trackLength = 200
+    val thrown = intercept[DataInvalidException] {
+      val track = new Track(trackLength)
+    }
+    logger.info(s"Got ${thrown} as expected.")
   }
 
 }

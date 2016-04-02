@@ -21,16 +21,8 @@ import RaceTrack._
 class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
     extends Track(trackLength) {
 
-  if (trackLength < 201) {
-    throw new DataInvalidException("Track Length must be greater")
-  }
-
   if (lanes > 254) {
     throw new DataInvalidException(s"Track does not support so many lanes (teams = ${lanes}})")
-  }
-
-  if (trackLength >= (Int.MaxValue - 1001)) {
-    throw new DataInvalidException("Track Length too large!")
   }
 
   // Just to hold the current positions of ids

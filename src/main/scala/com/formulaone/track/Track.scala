@@ -1,11 +1,21 @@
 package com.formulaone.track
 
+import com.formulaone.DataInvalidException
+
 import scala.collection.mutable.{ArrayBuffer, BitSet}
 
 /**
  * Created by yash.datta on 29/03/16.
  */
 class Track(val trackLength: Int) {
+
+  if (trackLength < 201) {
+    throw new DataInvalidException("Track Length must be greater")
+  }
+
+  if (trackLength >= (Int.MaxValue - 1001)) {
+    throw new DataInvalidException("Track Length too large!")
+  }
 
   // Additional length for cars finishing
   protected val track = new Array[Byte](trackLength+1001)
