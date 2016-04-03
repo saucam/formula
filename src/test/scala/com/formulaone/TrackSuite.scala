@@ -1,7 +1,6 @@
-package com.formulaone.test
+package com.formulaone
 
 import com.formulaone.track.Track
-import com.formulaone.{DataInvalidException, FormulaFunSuite}
 import com.typesafe.scalalogging.slf4j.LazyLogging
 
 /**
