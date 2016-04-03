@@ -69,4 +69,12 @@ class RaceTrackSuite extends FormulaFunSuite
     positions should equal (expPositions)
   }
 
+  test("Exception is thrown in case lanes are more than 255") {
+    val numLanes = 256
+    val thrown = intercept[DataInvalidException] {
+      val track = new RaceTrackTest(5000, numLanes, 10)
+    }
+
+    logger.info(s"Got Exception ${thrown} as expected")
+  }
 }

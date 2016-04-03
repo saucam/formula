@@ -15,7 +15,7 @@ class FormulaOneRaceTest(track: RaceTrack, numTeams: Int, tickInterval: Int)
     cars.map(x => x.acc)
   }
 
-  def getHfs(): Array[Float] = {
+  def getHfs(): Array[Double] = {
     cars.map(x => x.hf)
   }
 

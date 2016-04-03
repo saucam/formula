@@ -21,7 +21,7 @@ import RaceTrack._
 class RaceTrack(trackLength: Int, val lanes: Int, val threshold: Int = 10)
     extends Track(trackLength) {
 
-  if (lanes > 254) {
+  if (lanes > MAX_LANES) {
     throw new DataInvalidException(s"Track does not support so many lanes (teams = ${lanes}})")
   }
 
@@ -119,4 +119,5 @@ object RaceTrack {
 
   val FINISHED_POS = -1
   val START_POS = 1
+  val MAX_LANES = 255
 }

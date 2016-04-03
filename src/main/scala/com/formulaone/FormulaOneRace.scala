@@ -36,13 +36,23 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
   }
 
   private def getNewSpeed(car: Car, id: Int): Double = {
-    if (car.speed == car.topSpeed)
+    if (car.speed >= car.topSpeed)
       return car.topSpeed
-    val accSpeed = computeSpeed(car.speed, tickInterval, car.acc)
+    // Car accelerates upto top speed
+    val accSpeed = {
+      val aSpeed =
+        computeSpeed(car.speed, tickInterval, car.acc)
+
+      if (aSpeed > car.topSpeed) {
+        car.topSpeed
+      } else {
+        aSpeed
+      }
+    }
+
     if (track.isClose(id)) {
       (car.hf*accSpeed)
     } else {
-      // v = u + at
       accSpeed
     }
   }
@@ -152,11 +162,11 @@ class FormulaOneRace(track: RaceTrack, numTeams: Int, tickInterval: Int = 2)
 
   def getFinishTime(id: Int): Long = timings(id-1)
 
-  def getFinalSpeeds(): Array[Double] = {
+  def getFinalSpeeds(): Array[String] = {
     assert(hasEnded == true)
     val speeds = getCurrentSpeeds
     // limit to 2 decimal places ?
-    speeds.map(x => x - (x % 0.01))
+    speeds.map(x => ("%.3f").format(x))
   }
 
   def getCurrentSpeeds(): Array[Double] = {
